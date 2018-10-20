@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset=utf-8>
+    <title>My first three.js app</title>
+    <style>
+        body {
+            margin: 0;
+        }
+
+        canvas {
+            width: 100%;
+            height: 100%
+        }
+    </style>
+</head>
+
+<body>
+    <script src="js/three.js"></script>
+    <script>
+        var scene = new THREE.Scene();
+        var camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        var isMovingRight = false;
+        var isMovingUp = false;
+        var isMovingLeft = false;
+        var isMovingDown = false;
+        
+        var KEY_RIGHT = 39;
+
+        var renderer = new THREE.WebGLRenderer();
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        document.body.appendChild(renderer.domElement);
+        var geometry = new THREE.BoxGeometry(1, 1, 1);
+        var material = new THREE.MeshBasicMaterial({
+            color: 0x00ff00
+        });
+        var cube = new THREE.Mesh(geometry, material);
+        scene.add(cube);
+
+        camera.position.z = 5;
+
+        document.body.onkeydown = function (e) {
+            if (e.keyCode == KEY_RIGHT) isMovingRight = true;
+            if (e.keyCode == 38) isMovingUp = true;
+            if (e.keyCode == 37) isMovingLeft = true;
+            if (e.keyCode == 40) isMovingDown = true;
+        };
+
+
+        document.body.onkeyup = function (e) {
+            if (e.keyCode == 39) isMovingRight = false;
+            if (e.keyCode == 38) isMovingUp = false;
+            if (e.keyCode == 37) isMovingLeft = false;
+            if (e.keyCode == 40) isMovingDown = false;
+        };
+
+        function listener() {
+            if (isMovingRight) cube.position.x += 0.05;
+            if (isMovingUp) cube.position.y += 0.05;
+            if (isMovingLeft) cube.position.x -= 0.05;
+            if (isMovingDown) cube.position.y -= 0.05;
+        }
+
+        function animate() {
+            requestAnimationFrame(animate);
+            listener();
+            renderer.render(scene, camera);
+            cube.rotation.x += 0.01;
+            cube.rotation.y += 0.01;
+        }
+
+        animate();
+    </script>
+</body>
+
+</html>
